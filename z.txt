@@ -1,0 +1,177 @@
+import React, {useState, useEffect, useCallback} from 'react';
+import {View, StyleSheet, FlatList, ScrollView} from 'react-native';
+import SwipeView from './SwipeView';
+import Tab1Screen from './Tab1Screen';
+
+const Bo = () => {
+  // const data = [{key: '123'}, {key: '442'}, {key: '5353'}];
+
+  const [fourCornerData, setFourCornerData] = useState([]);
+  // console.log(fourCornerData); //   [   [  {},{}  ],  [ {},{}  ] ,   [  {},{}  ],   [  {},{} ]  ]
+  // const data1Array = fourCornerData.map(obj => {
+  //   return obj;
+  // });
+  console.log(fourCornerData);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const responses = await Promise.all([
+          fetch('https://www.almarkazia.com/ar/api/news/?category=24'),
+          fetch('https://www.almarkazia.com/ar/api/news/?category=4'),
+          fetch('https://www.almarkazia.com/ar/api/news/?category=7'),
+          fetch('https://www.almarkazia.com/ar/api/news/?category=9'),
+        ]);
+        const jsonData = await Promise.all(responses.map(res => res.json()));
+        const newData = jsonData.map((data, index) => {
+          return [...data.data.slice(0, 2)];
+        });
+        setFourCornerData(newData);
+      } catch (error) {
+        // console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
+
+
+
+  const data = [
+    {
+      id: '47333214',
+      title:
+        'الكرملين: الغرب بلا شك سيكثف محاولاته للتدخل في الانتخابات الرئاسية في روسيا عام 2024',
+      longTitle:
+        'الكرملين: الغرب بلا شك سيكثف محاولاته للتدخل في الانتخابات الرئاسية في روسيا عام 2024',
+      shortDescription: null,
+      content: null,
+      url: 'https://www.almarkazia.com/ar/news/show/473214',
+      slider: false,
+      date: '2023-04-24 12:44:43',
+      image:
+        'https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png',
+      category: '{id: 24, title: "أبرز الأحداث"}',
+    },
+    {
+      id: '4732w14',
+      title:
+        'الكرملين: الغرب بلا شك سيكثف محاولاته للتدخل في الانتخابات الرئاسية في روسيا عام 2024',
+      longTitle:
+        'الكرملين: الغرب بلا شك سيكثف محاولاته للتدخل في الانتخابات الرئاسية في روسيا عام 2024',
+      shortDescription: null,
+      content: null,
+      url: 'https://www.almarkazia.com/ar/news/show/473214',
+      slider: false,
+      date: '2023-04-24 12:44:43',
+      image:
+        'https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png',
+      category: '{id: 24, title: "أبرز الأحداث"}',
+    },
+  ];
+
+  return (
+    <>
+      <View style={styles.container}>
+        <SwipeView style={styles.swiper} />
+        <ScrollView>
+          {fourCornerData.map(object =>
+            object.map(item => <Tab1Screen data={object} key={object.id} />),
+          )}
+        </ScrollView>
+      </View>
+    </>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    height: '100%',
+  },
+  swiper: {
+    flex: 0,
+  },
+});
+
+export default Bo;
+
+
+======================================
+
+import React, {useCallback} from 'react';
+import {FlatList, Pressable, StyleSheet, Text, View, Image} from 'react-native';
+import {useDispatch} from 'react-redux';
+import {changeIcon} from '../store/redux/slice';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
+const Tab1Screen = ({data}) => {
+  const renderCategoryItem = ({item}) => (
+    <Pressable style={styles.item}>
+      <View>
+        <Image source={{uri: item.image}} style={styles.articleImage} />
+        <Text style={styles.firstTitle}>{item.longTitle}</Text>
+      </View>
+    </Pressable>
+  );
+
+  const keyExtractor = item => item.id || String(Math.random());
+
+  return (
+    <FlatList
+      data={data}
+      keyExtractor={keyExtractor}
+      numColumns={2}
+      contentContainerStyle={styles.contentContainer}
+      renderItem={renderCategoryItem}
+    />
+  );
+};
+
+const styles = StyleSheet.create({
+  item: {
+    // display: 'flex',
+    // alignItems: 'center',
+    justifyContent: 'center',
+    padding: 10,
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 2,
+  },
+  articleImage: {
+    width: '100%',
+    height: 150,
+    backgroundColor: 'red',
+    marginBottom: 10,
+    borderRadius: 5,
+  },
+  secondContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  dateOfNews: {
+    display: 'flex',
+    alignItems: 'center',
+    color: '#03296a',
+    fontSize: 12,
+  },
+  iqtisad: {
+    color: '#03296a',
+    fontSize: 12,
+  },
+  firstTitle: {
+    color: '#03296a',
+    fontSize: 16,
+    fontWeight: 'bold',
+    lineHeight: 22,
+  },
+});
+
+export default Tab1Screen;
