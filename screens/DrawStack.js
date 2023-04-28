@@ -60,6 +60,7 @@ function DrawStack() {
       const data = await response.json();
       dispatch(setDataToTrue());
       dispatch(setDataQuery(data.data[0]));
+      setText('');
     } catch (error) {}
   };
 
