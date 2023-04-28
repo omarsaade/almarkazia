@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, {useLayoutEffect, useState, useCallback, useRef} from 'react';
+import React, {useLayoutEffect, useState, useCallback} from 'react';
 import {createDrawerNavigator, DrawerItem} from '@react-navigation/drawer';
 import {
   ScrollView,
@@ -13,19 +13,25 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import {DrawerActions} from '@react-navigation/native';
 import {useSelector, useDispatch} from 'react-redux';
-import {closeButton, switchIcon} from '../store/redux/slice';
+import {
+  closeButton,
+  switchIcon,
+  setDataToFalse,
+  setDataToTrue,
+  setDataQuery,
+} from '../store/redux/slice';
 import TabStack from './TabStack';
 import NewsDetails from '../components/NewsDetails';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import DrawerMenuSelection from '../components/DrawerMenuSelection';
+import SearchList from '../components/SearchList';
 const Drawer = createDrawerNavigator();
 
 function DrawStack() {
   const dispatch = useDispatch();
   const [text, setText] = useState('');
-  // const textInputRef = useRef(null);
   const navigation = useNavigation();
   const {backButton} = useSelector(state => state.uiSlice);
   const [drawable, toggleDrawable] = useState(false);
@@ -35,7 +41,7 @@ function DrawStack() {
     toggleDrawable(prevState => !prevState);
   };
 
-  const backToto = () => {
+  const backToTabs = () => {
     dispatch(switchIcon());
     navigation.navigate('Tabs');
   };
@@ -45,26 +51,25 @@ function DrawStack() {
   };
 
   const handleSubmit = async () => {
-    // setText(keyword);
+    dispatch(setDataToFalse());
+    navigation.navigate('SearchList');
     try {
       const response = await fetch(
         `https://www.almarkazia.com/ar/api/news/?keyword=${text}`,
       );
       const data = await response.json();
-      console.log(data);
+      dispatch(setDataToTrue());
+      dispatch(setDataQuery(data.data[0]));
     } catch (error) {}
   };
 
   const forwardId = useCallback(async id => {
-    // console.log(id);
     try {
       dispatch(closeButton());
       navigation.navigate('SideMenuChooser', {
         categoryId: id,
       });
-    } catch (error) {
-      // handle the error
-    }
+    } catch (error) {}
   }, []);
 
   const getMenuItems = async () => {
@@ -131,7 +136,7 @@ function DrawStack() {
           ),
         headerLeft: () => (
           <Pressable
-            onPress={!backButton ? toggleState : backToto}
+            onPress={!backButton ? toggleState : backToTabs}
             style={{marginLeft: 10}}>
             {backButton && (
               <Ionicons name="chevron-back" size={30} color="white" />
@@ -156,6 +161,7 @@ function DrawStack() {
       <Drawer.Screen name="Tabs" component={TabStack} />
       <Drawer.Screen name="Detail" component={NewsDetails} />
       <Drawer.Screen name="SideMenuChooser" component={DrawerMenuSelection} />
+      <Drawer.Screen name="SearchList" component={SearchList} />
     </Drawer.Navigator>
   );
 }

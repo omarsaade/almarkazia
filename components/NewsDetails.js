@@ -35,21 +35,6 @@ const NewsDetails = ({route, navigation}) => {
     dispatch(searchBack());
   });
 
-  /*
-  useBackHandler(() => {
-    if (categoryId) {
-      dispatch(closeButton());
-    } else {
-      dispatch(searchBack());
-    }
-
-    setTimeout(() => {
-      navigation.navigate('HomePage', {
-        categoryId: categoryId,
-      });
-    }, 1);
-  });
- */
   const formattedCategoryContent = categoryContent
     ? categoryContent.replace(
         /(<([^>]+)>|&ldquo;|&ndash;|&rdquo;|&nbsp;|&quot;)/gi,

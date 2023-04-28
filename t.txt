@@ -425,7 +425,7 @@ function MyDraw() {
     toggleDrawable(prevState => !prevState);
   };
 
-  const backToto = () => {
+  const backToTabs = () => {
     dispatch(changeIcon());
     navigation.navigate('Tabs');
   };
@@ -507,7 +507,7 @@ function MyDraw() {
           ),
         headerLeft: () => (
           <Pressable
-            onPress={!backButton ? toggleState : backToto}
+            onPress={!backButton ? toggleState : backToTabs}
             style={{marginLeft: 10}}>
             {backButton && (
               <Ionicons name="chevron-back" size={30} color="white" />

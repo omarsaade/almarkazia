@@ -1,11 +1,13 @@
 import {createSlice} from '@reduxjs/toolkit';
 
 const initialState = {
+  dataIsLoading: true,
   backButton: false,
   drawable: false,
   latestNews: [],
   sectionData: [],
   news: [],
+  dataQuery: [],
   text: '',
 };
 export const uiSlice = createSlice({
@@ -36,6 +38,15 @@ export const uiSlice = createSlice({
     AddSectionData: (state, action) => {
       state.sectionData = action.payload;
     },
+    setDataToTrue: state => {
+      state.dataIsLoading = false;
+    },
+    setDataToFalse: state => {
+      state.dataIsLoading = true;
+    },
+    setDataQuery: (state, action) => {
+      state.dataQuery.push(action.payload);
+    },
   },
 });
 
@@ -48,6 +59,9 @@ export const {
   toggleDrawable,
   AddSectionData,
   closeButton,
+  setDataToTrue,
+  setDataToFalse,
+  setDataQuery,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

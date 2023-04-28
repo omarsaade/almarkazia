@@ -1,17 +1,14 @@
 import React from 'react';
-import {useLayoutEffect, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {View, Text, StyleSheet, FlatList, Image, Pressable} from 'react-native';
-import {setLatestNews} from '../store/redux/slice';
 import {useNavigation} from '@react-navigation/native';
 import {switchIcon} from '../store/redux/slice';
-
-const NewsUpdate = () => {
+const SearchList = () => {
+  const {dataIsLoading} = useSelector(state => state.uiSlice);
+  const {dataQuery} = useSelector(state => state.uiSlice);
   const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState(true);
 
   const navigation = useNavigation();
-  const {latestNews} = useSelector(state => state.uiSlice);
 
   const pressHandler = item => {
     dispatch(switchIcon());
@@ -26,37 +23,16 @@ const NewsUpdate = () => {
     });
   };
 
-  useLayoutEffect(() => {
-    let mounted = true;
-    setIsLoading(true);
-    getLatestNews().then(latestNs => {
-      if (mounted) {
-        dispatch(setLatestNews(latestNs.data));
-        setIsLoading(false);
-      }
-    });
-    return () => {
-      mounted = false;
-    };
-  }, [dispatch]);
-
-  async function getLatestNews() {
-    const response = await fetch(
-      'https://www.almarkazia.com/ar/api/news/?page={pageNum}',
-    );
-    const latestNs = await response.json();
-    return latestNs;
-  }
   return (
     <>
-      {isLoading ? (
+      {dataIsLoading ? (
         <View style={styles.loadingContainer}>
           <Text style={styles.loadingText}>الرجاء الانتظار قليلاً...</Text>
         </View>
       ) : (
         <View style={styles.container}>
           <FlatList
-            data={latestNews}
+            data={dataQuery}
             keyExtractor={item => item.id.toString()}
             renderItem={({item}) => (
               <Pressable onPress={() => pressHandler(item)}>
@@ -89,9 +65,19 @@ const NewsUpdate = () => {
     </>
   );
 };
-export default NewsUpdate;
+
+export default SearchList;
 
 const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
   container: {
     flex: 1,
     backgroundColor: '#F5F5F5',
@@ -136,14 +122,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'space-between',
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  loadingText: {
-    fontSize: 20,
-    fontWeight: 'bold',
   },
 });
