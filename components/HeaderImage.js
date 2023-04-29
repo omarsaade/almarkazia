@@ -1,9 +1,9 @@
 import React from 'react';
 import {View, Text, ImageBackground, StyleSheet, Pressable} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {closeButton} from '../store/redux/slice';
 import {useDispatch} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
+import {closeButton} from '../store/redux/slice';
 
 const HeaderImage = ({news}) => {
   const dispatch = useDispatch();

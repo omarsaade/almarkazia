@@ -1,3 +1,4 @@
+import React from 'react';
 import {View, Text, ImageBackground, StyleSheet, Pressable} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -7,7 +8,6 @@ import {switchIcon} from '../store/redux/slice';
 
 const SwipeView = () => {
   const dispatch = useDispatch();
-
   const navigation = useNavigation();
   const {latestNews} = useSelector(state => state.uiSlice);
 

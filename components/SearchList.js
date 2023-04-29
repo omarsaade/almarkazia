@@ -3,12 +3,12 @@ import {useSelector, useDispatch} from 'react-redux';
 import {View, Text, StyleSheet, FlatList, Image, Pressable} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {switchIcon} from '../store/redux/slice';
+
 const SearchList = () => {
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
   const {dataIsLoading} = useSelector(state => state.uiSlice);
   const {dataQuery} = useSelector(state => state.uiSlice);
-  const dispatch = useDispatch();
-
-  const navigation = useNavigation();
 
   const pressHandler = item => {
     dispatch(switchIcon());
@@ -23,6 +23,12 @@ const SearchList = () => {
     });
   };
 
+  const filteredData = Array.from(new Set(dataQuery.map(item => item.id))).map(
+    id => {
+      return dataQuery.find(item => item.id === id);
+    },
+  );
+
   return (
     <>
       {dataIsLoading ? (
@@ -32,11 +38,11 @@ const SearchList = () => {
       ) : (
         <View style={styles.container}>
           <FlatList
-            data={dataQuery}
+            data={filteredData}
             keyExtractor={item => item.id.toString()}
             renderItem={({item}) => (
               <Pressable onPress={() => pressHandler(item)}>
-                <View style={styles.articleContainer}>
+                <View style={styles.articleContainer} key={item.id}>
                   <Image
                     source={{
                       uri: item.image

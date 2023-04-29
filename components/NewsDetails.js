@@ -17,7 +17,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const {width} = Dimensions.get('window');
 
-const NewsDetails = ({route, navigation}) => {
+const NewsDetails = ({route}) => {
   const dispatch = useDispatch();
   const [fontSize, setFontSize] = useState(16);
 

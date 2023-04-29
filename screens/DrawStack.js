@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, {useLayoutEffect, useState, useCallback} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {createDrawerNavigator, DrawerItem} from '@react-navigation/drawer';
 import {
   ScrollView,
@@ -20,13 +20,14 @@ import {
   setDataToTrue,
   setDataQuery,
 } from '../store/redux/slice';
-import TabStack from './TabStack';
-import NewsDetails from '../components/NewsDetails';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import DrawerMenuSelection from '../components/DrawerMenuSelection';
 import SearchList from '../components/SearchList';
+import TabStack from './TabStack';
+import NewsDetails from '../components/NewsDetails';
+
 const Drawer = createDrawerNavigator();
 
 function DrawStack() {
@@ -92,7 +93,7 @@ function DrawStack() {
     setMenuItems(items);
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     try {
       getMenuItems();
     } catch (error) {
@@ -131,8 +132,8 @@ function DrawStack() {
             </View>
           ) : (
             <Image
-              source={require('../assets/sync-logo.png')}
-              style={{width: 120, height: 100, resizeMode: 'contain'}}
+              source={require('../assets/al.png')}
+              style={{width: 140, height: 100, resizeMode: 'contain'}}
             />
           ),
         headerLeft: () => (
@@ -196,11 +197,9 @@ const styles = StyleSheet.create({
     color: 'black',
     opacity: 0.8,
   },
-  backdrop: {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

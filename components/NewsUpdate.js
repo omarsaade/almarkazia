@@ -2,14 +2,12 @@ import React from 'react';
 import {useLayoutEffect, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {View, Text, StyleSheet, FlatList, Image, Pressable} from 'react-native';
-import {setLatestNews} from '../store/redux/slice';
+import {setLatestNews, switchIcon} from '../store/redux/slice';
 import {useNavigation} from '@react-navigation/native';
-import {switchIcon} from '../store/redux/slice';
 
 const NewsUpdate = () => {
-  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
-
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const {latestNews} = useSelector(state => state.uiSlice);
 

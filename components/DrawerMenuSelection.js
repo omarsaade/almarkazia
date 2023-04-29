@@ -1,11 +1,10 @@
 import React, {useCallback, useLayoutEffect, useState} from 'react';
 import {FlatList, Pressable, StyleSheet, Text, View, Image} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {closeButton} from '../store/redux/slice';
-import {AddSectionData} from '../store/redux/slice';
+import {useRoute} from '@react-navigation/native';
+import {closeButton, AddSectionData} from '../store/redux/slice';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import HeaderImage from './HeaderImage';
-import {useRoute} from '@react-navigation/native';
 
 const DrawerMenuSelection = ({navigation}) => {
   const [isLoading, setIsLoading] = useState(true);
